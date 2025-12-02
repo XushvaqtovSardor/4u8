@@ -4,20 +4,28 @@ import {
   Model,
   ForeignKey,
   BelongsTo,
+  DataType,
+  AutoIncrement,
+  PrimaryKey,
 } from 'sequelize-typescript';
 import { Users } from './users.model';
 @Table
 export class Posts extends Model {
-  @Column
-  post_title: string;
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  declare id: number;
 
   @Column
-  context: string;
+  declare post_title: string;
+
+  @Column
+  declare context: string;
 
   @ForeignKey(() => Users)
   @Column
-  userId: number;
+  declare userId: number;
 
   @BelongsTo(() => Users)
-  user: Users;
+  declare user: Users;
 }

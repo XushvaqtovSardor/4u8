@@ -9,10 +9,11 @@ export class PostsService {
   constructor(
     @Inject('POSTS_REPOSITORY')
     private postsRepository: typeof Posts,
-  ) {}
 
-  async create(createPostDto: CreatePostDto) {
-    return await this.postsRepository.create(createPostDto as any);
+    @Inject('USERS_REPOSITORY') private usersRepo: typeof Users,
+  ) {}
+  async create(dto: CreatePostDto, userId: number) {
+    return await this.postsRepository.create({ ...dto, userId });
   }
 
   async findAll() {

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from '../Sequalize/users.model';
@@ -11,8 +11,8 @@ export class UsersService {
     private usersRepository: typeof Users,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return await this.usersRepository.create(createUserDto as any);
+  async create(dto: CreateUserDto) {
+    return await this.usersRepository.create(dto as any);
   }
 
   async findAll() {
@@ -33,12 +33,19 @@ export class UsersService {
     });
     return await this.findOne(id);
   }
-
-  async remove(id: number) {
-    const user = await this.findOne(id);
+  async removeUserPosts(id: number, force: boolean) {
+    const userData = await this.usersRepository.findByPk(+id, {
+      include: [Posts],
+    });
+    if (!userData) throw new NotFoundException('User not found');
+    if (force) {
+      await Posts.destroy({
+        where: { userId: id },
+      });
+    }
     await this.usersRepository.destroy({
       where: { id },
     });
-    return user;
+    return { message: 'Sucussfully' };
   }
 }

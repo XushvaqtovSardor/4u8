@@ -1,17 +1,30 @@
-import { Column, Table, Model, HasMany } from 'sequelize-typescript';
+import {
+  Column,
+  Table,
+  Model,
+  HasMany,
+  PrimaryKey,
+  AutoIncrement,
+  DataType,
+} from 'sequelize-typescript';
 import { Posts } from './posts.model';
 
 @Table
 export class Users extends Model {
-  @Column
-  user_name: string;
+  @PrimaryKey
+  @AutoIncrement
+  @Column(DataType.INTEGER)
+  declare id: number;
 
   @Column
-  age: number;
+  declare user_name: string;
 
   @Column
-  password: string;
+  declare age: number;
+
+  @Column
+  declare password: string;
 
   @HasMany(() => Posts)
-  posts: Posts[];
+  declare posts: Posts[];
 }
