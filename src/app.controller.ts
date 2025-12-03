@@ -25,7 +25,7 @@ export class AppController {
     }
     return {
       message: 'Fayl nomi',
-      filename:file.filename,
+      filename: file.filename,
     };
   }
 }
